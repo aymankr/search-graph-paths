@@ -1,0 +1,12 @@
+#1:start and end points
+0 2
+#2:points and routes
+0 0.5 10.2
+1 10.1 10.5
+2 10.5 20.3
+#3:routes
+0 1
+1 2
+2 0
+#4:stops
+1 2
