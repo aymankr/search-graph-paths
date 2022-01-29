@@ -10,7 +10,8 @@
  */
 public class Route {
     
-    private Point p1, p2;
+    private final Point p1;
+    private final Point p2;
     
     private boolean stop;
     

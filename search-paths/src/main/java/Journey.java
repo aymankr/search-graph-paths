@@ -12,11 +12,12 @@ import java.util.ArrayList;
  */
 public class Journey {
 
-    private Point start, end;
+    private final Point start;
+    private final Point end;
 
-    private ArrayList<Route> routes;
+    private final ArrayList<Route> routes;
 
-    private ArrayList<Point> points;
+    private final ArrayList<Point> points;
 
     public Journey(Point start, Point end) {
         this.start = start;
@@ -50,4 +51,6 @@ public class Journey {
     public void addRoute(Route r) {
         routes.add(r);
     }
+    
+    
 }
