@@ -2,7 +2,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import static java.lang.Integer.parseInt;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 /*
@@ -16,22 +15,21 @@ import java.util.Scanner;
  */
 public class Main {
 
-    private Journey journey;
+    private static Journey journey;
 
     public static void main(String[] args) throws FileNotFoundException {
-
+        initializeJourney();
     }
 
-    private void setJourney() throws FileNotFoundException {
-        File f = new File("src/files/journey.txt");
-
+    private static void initializeJourney() throws FileNotFoundException {
+        String path = System.getProperty("user.dir").replace('\\', '/') + "/files/journey.txt";
+        File f = new File(path);
         Scanner scanner = new Scanner(f);
         String row = scanner.nextLine();
 
         if (row.contains("#1")) {
             row = scanner.nextLine();
-            setStartPoint(row);
-            setEndPoint(row);
+            journey = new Journey(getStartPoint(row), getEndPoint(row));
             row = scanner.nextLine();
         }
 
@@ -50,33 +48,38 @@ public class Main {
             }
         }
         if (row.contains("#4")) {
-            row = scanner.nextLine();
-            while (!scanner.hasNext()) {
-                setStop(row);
+            while (scanner.hasNextLine()) {
                 row = scanner.nextLine();
+                setStop(row);
             }
         }
     }
 
-    private void setStartPoint(String s) {
-        journey.setStart(new Point(parseInt(s.split(" ")[0])));
+    private static Point getStartPoint(String s) {
+        return new Point(parseInt(s.split(" ")[0]));
     }
 
-    private void setEndPoint(String s) {
-        journey.setEnd(new Point(parseInt(s.split(" ")[1])));
+    private static Point getEndPoint(String s) {
+        return new Point(parseInt(s.split(" ")[1]));
     }
 
-    private void addPoints(String s) {
-        journey.addPoint(new Point(parseInt(s.split(" ")[0]), Float.parseFloat(s.split(" ")[1]), Float.parseFloat(s.split(" ")[2])));
+    private static void addPoints(String s) {
+        Point point = (Point) journey.getPoints().stream().filter(p -> p.getId() == parseInt(s.split(" ")[0])).findAny().orElse(null);
+        if (point == null) {
+            journey.addPoint(new Point(parseInt(s.split(" ")[0]), Float.parseFloat(s.split(" ")[1]), Float.parseFloat(s.split(" ")[2])));
+        } else {
+            point.setLongitude(Float.parseFloat(s.split(" ")[1]));
+            point.setLatitude(Float.parseFloat(s.split(" ")[2]));
+        }
     }
 
-    private void addRoutes(String s) {
+    private static void addRoutes(String s) {
         Point p1 = (Point) journey.getPoints().stream().filter(p -> p.getId() == parseInt(s.split(" ")[0])).findAny().orElse(null);
         Point p2 = (Point) journey.getPoints().stream().filter(p -> p.getId() == parseInt(s.split(" ")[1])).findAny().orElse(null);
         journey.addRoute(new Route(p1, p2));
     }
 
-    private void setStop(String s) {
+    private static void setStop(String s) {
         Point p1 = (Point) journey.getPoints().stream().filter(p -> p.getId() == parseInt(s.split(" ")[0])).findAny().orElse(null);
         Point p2 = (Point) journey.getPoints().stream().filter(p -> p.getId() == parseInt(s.split(" ")[1])).findAny().orElse(null);
 

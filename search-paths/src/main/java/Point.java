@@ -23,6 +23,18 @@ public class Point {
         this.longitude = longitude;
         this.latitude = latitude;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setLongitude(float longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setLatitude(float latitude) {
+        this.latitude = latitude;
+    }
     
     public float getLongitude() {
         return longitude;

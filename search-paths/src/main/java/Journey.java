@@ -18,43 +18,29 @@ public class Journey {
 
     private ArrayList<Point> points;
 
-    public Journey(Point start, Point end, ArrayList<Route> routes, ArrayList<Point> points) {
+    public Journey(Point start, Point end) {
         this.start = start;
         this.end = end;
-        this.routes = routes;
-        this.points = points;
+        this.routes = new ArrayList<>();
+        this.points = new ArrayList<>();
+        points.add(start);
+        points.add(end);
     }
 
     public Point getStart() {
         return start;
     }
 
-    public void setStart(Point start) {
-        this.start = start;
-    }
-
     public Point getEnd() {
         return end;
-    }
-
-    public void setEnd(Point end) {
-        this.end = end;
     }
 
     public ArrayList<Route> getRoutes() {
         return routes;
     }
 
-    public void setRoutes(ArrayList<Route> routes) {
-        this.routes = routes;
-    }
-
     public ArrayList<Point> getPoints() {
         return points;
-    }
-
-    public void setPoints(ArrayList<Point> points) {
-        this.points = points;
     }
 
     public void addPoint(Point p) {
