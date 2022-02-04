@@ -13,13 +13,35 @@ import java.util.stream.Collectors;
  */
 public class Path {
 
-    private ArrayList<Route> routes;
+    private ArrayList<Point> points;
 
+    public Path () {
+        points = new ArrayList<>();
+    }    
     public int getLength() {
-        return routes.size();
+        return points.size();
+    }
+/*
+    public ArrayList<Point> getStops() {
+        return (ArrayList<Point>) points.stream().filter(r -> r.isStop()).collect(Collectors.toList());
+    }
+*/
+    public ArrayList<Point> getPoints() {
+        return points;
     }
 
-    public ArrayList<Route> getStops() {
-        return (ArrayList<Route>) routes.stream().filter(r -> r.isStop()).collect(Collectors.toList());
+    public void addPoint(Point e) {
+        points.add(e);
+    }
+
+    public void removePoint(Point e) {
+        points.remove(e);
+    }
+    
+        public void displayPath() {
+        points.forEach(p -> {
+            System.out.print(p.getId() + " ");
+        });
+        System.out.println();
     }
 }

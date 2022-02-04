@@ -8,14 +8,14 @@
  *
  * @author ay
  */
-public class Route {
+public class Edge {
     
     private final Point p1;
     private final Point p2;
     
     private boolean stop;
     
-    public Route(Point p1, Point p2) {
+    public Edge(Point p1, Point p2) {
         this.p1 = p1;
         this.p2 = p2;
     }
