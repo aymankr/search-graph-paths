@@ -18,7 +18,7 @@ public class Graph {
     private final ArrayList<Edge> edges;
     private ArrayList<Integer>[] adjList;
     private final ArrayList<Point> points;
-    private ArrayList<Path> paths;
+    private final ArrayList<Path> paths;
 
     public Graph(Point start, Point end) {
         this.start = start;
@@ -65,16 +65,12 @@ public class Graph {
         edges.add(r);
         adjList[r.getP1().getId()].add(r.getP2().getId());
     }
-    
+
     public void addPath(Path p) {
         paths.add(p);
-    }  
-    
+    }
+
     public ArrayList<Path> getPaths() {
         return paths;
-    }
-    
-    public Point getPoint(Integer id) {
-        return (Point) points.stream().filter(ptmp -> ptmp.getId() == id).findAny().orElse(null);
     }
 }

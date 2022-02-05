@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class Path implements Cloneable {
 
     private ArrayList<Point> points;
-    private Graph graph;
+    private final Graph graph;
     private ArrayList<Edge> edges;
 
     public Path(Graph graph) {
@@ -64,7 +64,10 @@ public class Path implements Cloneable {
     }
 
     public void displayPath() {
-        System.out.println("Nb points : " + getNbPoints() + " | Nb stops : " + getEdgesWithStops().size() + " | Total euclidean distance : " + getTotalEuclideanDistance());
+        System.out.println("Nb points : " + getNbPoints()
+                + " | Nb stops : " + getEdgesWithStops().size()
+                + " (weight in distance : " + getEdgesWithStops().size() * 10 + ")"
+                + " | Total euclidean distance : " + getTotalEuclideanDistance());
         points.forEach(p -> {
             System.out.print(p.getId() + " ");
         });
