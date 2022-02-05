@@ -29,14 +29,14 @@ public class Main {
 
         if (row.contains("#1")) {
             row = scanner.nextLine();
-            graph = new Graph(new Point(parseInt(row.split(" ")[0])), new Point(parseInt(row.split(" ")[1])));
+            graph = new Graph(new Vertice(parseInt(row.split(" ")[0])), new Vertice(parseInt(row.split(" ")[1])));
             row = scanner.nextLine();
         }
 
         if (row.contains("#2")) {
             row = scanner.nextLine();
             while (!row.contains("#3")) {
-                addPoints(row);
+                addVertices(row);
                 row = scanner.nextLine();
             }
             graph.initAdjList();
@@ -55,55 +55,50 @@ public class Main {
             }
         }
 
-        getAllPaths(graph.getStart().getId(), graph.getEnd().getId());
+        findAllPaths(graph.getStart().getId(), graph.getEnd().getId());
+        displayBestPath();
     }
 
-    public static Point getPointFromId(Integer id) {
-        return (Point) graph.getPoints().stream().filter(ptmp -> ptmp.getId() == id).findAny().orElse(null);
+    public static Vertice getVerticeFromId(Integer id) {
+        return (Vertice) graph.getVertices().stream().filter(ptmp -> ptmp.getId() == id).findAny().orElse(null);
     }
 
-    public static Point getFirstPoint(String s) {
-        return getPointFromId(parseInt(s.split(" ")[0]));
+    public static Vertice getFirstVertice(String s) {
+        return getVerticeFromId(parseInt(s.split(" ")[0]));
     }
 
-    public static Point getSecondPoint(String s) {
-        return getPointFromId(parseInt(s.split(" ")[1]));
+    public static Vertice getSecondVertice(String s) {
+        return getVerticeFromId(parseInt(s.split(" ")[1]));
     }
 
-    private static void addPoints(String s) {
-        if (getFirstPoint(s) == null) {
-            graph.addPoint(new Point(parseInt(s.split(" ")[0]), Float.parseFloat(s.split(" ")[1]), Float.parseFloat(s.split(" ")[2])));
+    private static void addVertices(String s) {
+        if (getFirstVertice(s) == null) {
+            graph.addVertice(new Vertice(parseInt(s.split(" ")[0]), Float.parseFloat(s.split(" ")[1]), Float.parseFloat(s.split(" ")[2])));
         } else {
-            getFirstPoint(s).setLongitude(Float.parseFloat(s.split(" ")[1]));
-            getFirstPoint(s).setLatitude(Float.parseFloat(s.split(" ")[2]));
+            getFirstVertice(s).setLongitude(Float.parseFloat(s.split(" ")[1]));
+            getFirstVertice(s).setLatitude(Float.parseFloat(s.split(" ")[2]));
         }
     }
 
     private static void addEdge(String s) {
-        graph.addEdge(new Edge(getFirstPoint(s), getSecondPoint(s)));
+        graph.addEdge(new Edge(getFirstVertice(s), getSecondVertice(s)));
     }
 
     private static void setStop(String s) {
-        graph.getEdges().stream().filter(r -> r.getP1().equals(getFirstPoint(s))
-                && r.getP2().equals(getSecondPoint(s)))
+        graph.getEdges().stream().filter(r -> r.getP1().equals(getFirstVertice(s))
+                && r.getP2().equals(getSecondVertice(s)))
                 .findAny().orElse(null)
                 .setStopToTrue();
     }
 
-    private static void bestPath() {
-        System.out.println("\nBest path :");
-        Collections.min(graph.getPaths(), Comparator.comparing(p -> p.getNbPoints() + p.getEdgesWithStops().size() * 10 + p.getTotalEuclideanDistance())).displayPath();
-    }
-
-    public static void getAllPaths(int s, int d) throws CloneNotSupportedException {
-        boolean[] isVisited = new boolean[graph.getPoints().size()];
+    public static void findAllPaths(int s, int d) throws CloneNotSupportedException {
+        boolean[] isVisited = new boolean[graph.getVertices().size()];
         Path path = new Path(graph);
-        path.addPoint(getPointFromId(s));
-        searchAllPaths(s, d, isVisited, path);
-        bestPath();
+        path.addVertice(getVerticeFromId(s));
+        searchPaths(s, d, isVisited, path);
     }
 
-    private static void searchAllPaths(Integer u, Integer d, boolean[] isVisited, Path p) throws CloneNotSupportedException {
+    private static void searchPaths(Integer u, Integer d, boolean[] isVisited, Path p) throws CloneNotSupportedException {
         if (u.equals(d)) {
             graph.addPath((Path) p.clone());
             ((Path) p.clone()).displayPath();
@@ -113,11 +108,16 @@ public class Main {
         isVisited[u] = true;
         for (Integer i : graph.getAdjList()[u]) {
             if (!isVisited[i]) {
-                p.addPoint(getPointFromId(i));
-                searchAllPaths(i, d, isVisited, p);
-                p.removePoint(getPointFromId(i));
+                p.addVertice(getVerticeFromId(i));
+                searchPaths(i, d, isVisited, p);
+                p.removeVertice(getVerticeFromId(i));
             }
         }
         isVisited[u] = false;
+    }
+
+    private static void displayBestPath() {
+        System.out.println("\nBest path :");
+        Collections.min(graph.getPaths(), Comparator.comparing(p -> p.getNbVertices() + p.getEdgesWithStops().size() * 10 + p.getTotalEuclideanDistance())).displayPath();
     }
 }

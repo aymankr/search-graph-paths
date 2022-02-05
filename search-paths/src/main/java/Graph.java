@@ -12,36 +12,36 @@ import java.util.ArrayList;
  */
 public class Graph {
 
-    private final Point start;
-    private final Point end;
+    private final Vertice start;
+    private final Vertice end;
 
     private final ArrayList<Edge> edges;
-    private ArrayList<Integer>[] adjList;
-    private final ArrayList<Point> points;
+    private ArrayList<Integer>[] adjacencyList;
+    private final ArrayList<Vertice> vertices;
     private final ArrayList<Path> paths;
 
-    public Graph(Point start, Point end) {
+    public Graph(Vertice start, Vertice end) {
         this.start = start;
         this.end = end;
         this.edges = new ArrayList<>();
-        this.points = new ArrayList<>();
+        this.vertices = new ArrayList<>();
         this.paths = new ArrayList<>();
-        points.add(start);
-        points.add(end);
+        vertices.add(start);
+        vertices.add(end);
     }
 
     public void initAdjList() {
-        adjList = new ArrayList[points.size()];
-        for (int i = 0; i < points.size(); i++) {
-            adjList[i] = new ArrayList<>();
+        adjacencyList = new ArrayList[vertices.size()];
+        for (int i = 0; i < vertices.size(); i++) {
+            adjacencyList[i] = new ArrayList<>();
         }
     }
 
-    public Point getStart() {
+    public Vertice getStart() {
         return start;
     }
 
-    public Point getEnd() {
+    public Vertice getEnd() {
         return end;
     }
 
@@ -49,21 +49,21 @@ public class Graph {
         return edges;
     }
 
-    public ArrayList<Point> getPoints() {
-        return points;
+    public ArrayList<Vertice> getVertices() {
+        return vertices;
     }
 
     public ArrayList<Integer>[] getAdjList() {
-        return adjList;
+        return adjacencyList;
     }
 
-    public void addPoint(Point p) {
-        points.add(p);
+    public void addVertice(Vertice p) {
+        vertices.add(p);
     }
 
     public void addEdge(Edge r) {
         edges.add(r);
-        adjList[r.getP1().getId()].add(r.getP2().getId());
+        adjacencyList[r.getP1().getId()].add(r.getP2().getId());
     }
 
     public void addPath(Path p) {

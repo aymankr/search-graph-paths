@@ -10,12 +10,12 @@
  */
 public class Edge {
 
-    private final Point p1;
-    private final Point p2;
+    private final Vertice p1;
+    private final Vertice p2;
 
     private boolean stop;
 
-    public Edge(Point p1, Point p2) {
+    public Edge(Vertice p1, Vertice p2) {
         this.p1 = p1;
         this.p2 = p2;
     }
@@ -28,11 +28,11 @@ public class Edge {
         stop = true;
     }
 
-    public Point getP1() {
+    public Vertice getP1() {
         return p1;
     }
 
-    public Point getP2() {
+    public Vertice getP2() {
         return p2;
     }
 

@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
  */
 public class Path implements Cloneable {
 
-    private ArrayList<Point> points;
+    private ArrayList<Vertice> vertices;
     private final Graph graph;
     private ArrayList<Edge> edges;
 
     public Path(Graph graph) {
-        points = new ArrayList<>();
+        vertices = new ArrayList<>();
         edges = new ArrayList<>();
         this.graph = graph;
     }
@@ -27,7 +27,7 @@ public class Path implements Cloneable {
     protected Object clone() throws CloneNotSupportedException {
         Path cloned = (Path) super.clone();
         cloned.edges = (ArrayList<Edge>) edges.clone();
-        cloned.points = (ArrayList<Point>) points.clone();
+        cloned.vertices = (ArrayList<Vertice>) vertices.clone();
         return cloned;
     }
 
@@ -35,23 +35,23 @@ public class Path implements Cloneable {
         return (ArrayList<Edge>) edges.stream().filter(p -> p.isStop()).collect(Collectors.toList());
     }
 
-    public int getNbPoints() {
-        return points.size();
+    public int getNbVertices() {
+        return vertices.size();
     }
 
     public int getTotalEuclideanDistance() {
         return edges.stream().mapToInt(e -> e.getLength()).sum();
     }
 
-    public void addPoint(Point e) {
-        Edge edge1 = (Edge) graph.getEdges().stream().filter(r -> r.getP2().equals(e) && points.contains(r.getP1())).findAny().orElse(null);
+    public void addVertice(Vertice e) {
+        Edge edge1 = (Edge) graph.getEdges().stream().filter(r -> r.getP2().equals(e) && vertices.contains(r.getP1())).findAny().orElse(null);
         if (edge1 != null) {
             edges.add(edge1);
         }
-        points.add(e);
+        vertices.add(e);
     }
 
-    public void removePoint(Point e) {
+    public void removeVertice(Vertice e) {
         Edge edge1 = (Edge) graph.getEdges().stream().filter(r -> r.getP1().equals(e)).findAny().orElse(null);
         if (edge1 != null) {
             edges.remove(edge1);
@@ -60,15 +60,15 @@ public class Path implements Cloneable {
         if (edge2 != null) {
             edges.remove(edge2);
         }
-        points.remove(e);
+        vertices.remove(e);
     }
 
     public void displayPath() {
-        System.out.println("Nb points : " + getNbPoints()
+        System.out.println("Nb vertices : " + getNbVertices()
                 + " | Nb stops : " + getEdgesWithStops().size()
                 + " (weight in distance : " + getEdgesWithStops().size() * 10 + ")"
                 + " | Total euclidean distance : " + getTotalEuclideanDistance());
-        points.forEach(p -> {
+        vertices.forEach(p -> {
             System.out.print(p.getId() + " ");
         });
         System.out.println();

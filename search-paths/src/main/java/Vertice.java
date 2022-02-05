@@ -8,17 +8,17 @@
  *
  * @author ay
  */
-public class Point {
+public class Vertice {
     
     private int id;
     
     private float longitude, latitude;
     
-    public Point(int id) {
+    public Vertice(int id) {
         this.id = id;
     }
     
-    public Point(int id, float longitude, float latitude) {
+    public Vertice(int id, float longitude, float latitude) {
         this.id = id;
         this.longitude = longitude;
         this.latitude = latitude;
