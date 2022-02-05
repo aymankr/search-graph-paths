@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  *
  * @author ay
  */
-public class Path {
+public class Path implements Cloneable {
 
     private ArrayList<Point> points;
     private Graph graph;
@@ -23,12 +23,24 @@ public class Path {
         this.graph = graph;
     }
 
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        Path cloned = (Path) super.clone();
+        cloned.edges = (ArrayList<Edge>) edges.clone();
+        cloned.points = (ArrayList<Point>) points.clone();
+        return cloned;
+    }
+
     public ArrayList<Edge> getEdgesWithStops() {
         return (ArrayList<Edge>) edges.stream().filter(p -> p.isStop()).collect(Collectors.toList());
     }
 
-    public int getLengthPath() {
+    public int getNbPoints() {
         return points.size();
+    }
+
+    public int getTotalEuclideanDistance() {
+        return edges.stream().mapToInt(e -> e.getLength()).sum();
     }
 
     public void addPoint(Point e) {
@@ -52,7 +64,7 @@ public class Path {
     }
 
     public void displayPath() {
-        System.out.println("Nb points : " + getLengthPath() + ", nb edges with stops : " + getEdgesWithStops().size());
+        System.out.println("Nb points : " + getNbPoints() + " | Nb stops : " + getEdgesWithStops().size() + " | Total euclidean distance : " + getTotalEuclideanDistance());
         points.forEach(p -> {
             System.out.print(p.getId() + " ");
         });

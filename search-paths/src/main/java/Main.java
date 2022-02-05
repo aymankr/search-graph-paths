@@ -22,11 +22,11 @@ public class Main {
 
     private static Graph graph;
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, CloneNotSupportedException {
         buildGraphFromFile();
     }
 
-    private static void buildGraphFromFile() throws FileNotFoundException {
+    private static void buildGraphFromFile() throws FileNotFoundException, CloneNotSupportedException {
         String path = System.getProperty("user.dir").replace('\\', '/') + "/files/journey.txt";
         File f = new File(path);
         Scanner scanner = new Scanner(f);
@@ -96,24 +96,24 @@ public class Main {
         edge.setStopToTrue();
     }
 
-    private static void shortestPath() {
-        for (Path pp : graph.getPaths()) {
-            System.out.println(pp + " " + pp.getLengthPath() + " " + pp.getEdgesWithStops().size());
-        }
-        Collections.min(graph.getPaths(), Comparator.comparing(p -> p.getLengthPath() + p.getEdgesWithStops().size())).displayPath();
+    private static void bestPath() {
+        System.out.println("\nBest path :");
+        Collections.min(graph.getPaths(), Comparator.comparing(p -> p.getNbPoints() + p.getEdgesWithStops().size() + p.getTotalEuclideanDistance())).displayPath();
     }
 
-    public static void getAllPaths(int s, int d) {
+    public static void getAllPaths(int s, int d) throws CloneNotSupportedException {
         boolean[] isVisited = new boolean[graph.getPoints().size()];
         Path path = new Path(graph);
         path.addPoint(graph.getPoint(s));
         searchAllPaths(s, d, isVisited, path);
-        shortestPath();
+        bestPath();
     }
 
-    private static void searchAllPaths(Integer u, Integer d, boolean[] isVisited, Path p) {
+    private static void searchAllPaths(Integer u, Integer d, boolean[] isVisited, Path p) throws CloneNotSupportedException {
         if (u.equals(d)) {
-            graph.addPath(p);
+            Path p2 = (Path) p.clone();
+            graph.addPath(p2);
+            p2.displayPath();
             return;
         }
 

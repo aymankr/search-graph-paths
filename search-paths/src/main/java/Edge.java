@@ -9,21 +9,21 @@
  * @author ay
  */
 public class Edge {
-    
+
     private final Point p1;
     private final Point p2;
-    
+
     private boolean stop;
-    
+
     public Edge(Point p1, Point p2) {
         this.p1 = p1;
         this.p2 = p2;
     }
-    
+
     public int getLength() {
-        return (int) Math.sqrt((p1.getLatitude() - p1.getLongitude()) + (p2.getLatitude() - p2.getLongitude()));
+        return (int) Math.sqrt(Math.pow(p1.getLatitude() - p1.getLongitude(), 2) + Math.pow(p2.getLatitude() - p2.getLongitude(), 2));
     }
-    
+
     public void setStopToTrue() {
         stop = true;
     }
