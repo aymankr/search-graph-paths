@@ -14,31 +14,45 @@ import java.util.stream.Collectors;
 public class Path {
 
     private ArrayList<Point> points;
+    private Graph graph;
+    private ArrayList<Edge> edges;
 
-    public Path () {
+    public Path(Graph graph) {
         points = new ArrayList<>();
-    }    
-    public int getLength() {
+        edges = new ArrayList<>();
+        this.graph = graph;
+    }
+
+    public ArrayList<Edge> getEdgesWithStops() {
+        return (ArrayList<Edge>) edges.stream().filter(p -> p.isStop()).collect(Collectors.toList());
+    }
+
+    public int getLengthPath() {
         return points.size();
-    }
-/*
-    public ArrayList<Point> getStops() {
-        return (ArrayList<Point>) points.stream().filter(r -> r.isStop()).collect(Collectors.toList());
-    }
-*/
-    public ArrayList<Point> getPoints() {
-        return points;
     }
 
     public void addPoint(Point e) {
+        Edge edge1 = (Edge) graph.getEdges().stream().filter(r -> r.getP2().equals(e) && points.contains(r.getP1())).findAny().orElse(null);
+        if (edge1 != null) {
+            edges.add(edge1);
+        }
         points.add(e);
     }
 
     public void removePoint(Point e) {
+        Edge edge1 = (Edge) graph.getEdges().stream().filter(r -> r.getP1().equals(e)).findAny().orElse(null);
+        if (edge1 != null) {
+            edges.remove(edge1);
+        }
+        Edge edge2 = (Edge) graph.getEdges().stream().filter(r -> r.getP2().equals(e)).findAny().orElse(null);
+        if (edge2 != null) {
+            edges.remove(edge2);
+        }
         points.remove(e);
     }
-    
-        public void displayPath() {
+
+    public void displayPath() {
+        System.out.println("Nb points : " + getLengthPath() + ", nb edges with stops : " + getEdgesWithStops().size());
         points.forEach(p -> {
             System.out.print(p.getId() + " ");
         });

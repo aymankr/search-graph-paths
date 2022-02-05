@@ -73,4 +73,8 @@ public class Graph {
     public ArrayList<Path> getPaths() {
         return paths;
     }
+    
+    public Point getPoint(Integer id) {
+        return (Point) points.stream().filter(ptmp -> ptmp.getId() == id).findAny().orElse(null);
+    }
 }

@@ -96,40 +96,35 @@ public class Main {
         edge.setStopToTrue();
     }
 
-    /*
-    private Path shortestPathFromPaths(ArrayList<Path> paths) {
-        return Collections.min(paths, Comparator.comparing(p -> p.getLength()));
+    private static void shortestPath() {
+        for (Path pp : graph.getPaths()) {
+            System.out.println(pp + " " + pp.getLengthPath() + " " + pp.getEdgesWithStops().size());
+        }
+        Collections.min(graph.getPaths(), Comparator.comparing(p -> p.getLengthPath() + p.getEdgesWithStops().size())).displayPath();
     }
 
-    private ArrayList<Path> pathsWithStops(ArrayList<Path> paths) {
-        return (ArrayList<Path>) paths.stream().filter(p -> p.getStops().size() >= 1).collect(Collectors.toList());
-    }
-
-    private Path shortestPathWithStops(ArrayList<Path> paths) {
-        return shortestPathFromPaths(pathsWithStops(paths));
-    }
-     */
     public static void getAllPaths(int s, int d) {
         boolean[] isVisited = new boolean[graph.getPoints().size()];
-        Path path = new Path();
-        path.addPoint((Point) graph.getPoints().stream().filter(point -> point.getId() == s).findAny().orElse(null));
+        Path path = new Path(graph);
+        path.addPoint(graph.getPoint(s));
         searchAllPaths(s, d, isVisited, path);
+        shortestPath();
     }
 
     private static void searchAllPaths(Integer u, Integer d, boolean[] isVisited, Path p) {
         if (u.equals(d)) {
-            p.displayPath();
+            graph.addPath(p);
+            return;
         }
 
         isVisited[u] = true;
         for (Integer i : graph.getAdjList()[u]) {
             if (!isVisited[i]) {
-                p.addPoint((Point) graph.getPoints().stream().filter(ptmp -> ptmp.getId() == i).findAny().orElse(null));
+                p.addPoint(graph.getPoint(i));
                 searchAllPaths(i, d, isVisited, p);
-                p.removePoint((Point) graph.getPoints().stream().filter(ptmp -> ptmp.getId() == i).findAny().orElse(null));
+                p.removePoint(graph.getPoint(i));
             }
         }
-
         isVisited[u] = false;
     }
 }
