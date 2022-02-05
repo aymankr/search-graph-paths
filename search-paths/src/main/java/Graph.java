@@ -16,7 +16,7 @@ public class Graph {
     private final Vertice end;
 
     private final ArrayList<Edge> edges;
-    private ArrayList<Integer>[] adjacencyList;
+    private ArrayList<Integer>[] adjacentVerticesId;
     private final ArrayList<Vertice> vertices;
     private final ArrayList<Path> paths;
 
@@ -30,10 +30,10 @@ public class Graph {
         vertices.add(end);
     }
 
-    public void initAdjList() {
-        adjacencyList = new ArrayList[vertices.size()];
+    public void initAdjVertices() {
+        adjacentVerticesId = new ArrayList[vertices.size()];
         for (int i = 0; i < vertices.size(); i++) {
-            adjacencyList[i] = new ArrayList<>();
+            adjacentVerticesId[i] = new ArrayList<>();
         }
     }
 
@@ -53,8 +53,8 @@ public class Graph {
         return vertices;
     }
 
-    public ArrayList<Integer>[] getAdjList() {
-        return adjacencyList;
+    public ArrayList<Integer>[] getAdjVertices() {
+        return adjacentVerticesId;
     }
 
     public void addVertice(Vertice p) {
@@ -63,7 +63,7 @@ public class Graph {
 
     public void addEdge(Edge r) {
         edges.add(r);
-        adjacencyList[r.getP1().getId()].add(r.getP2().getId());
+        adjacentVerticesId[r.getP1().getId()].add(r.getP2().getId());
     }
 
     public void addPath(Path p) {

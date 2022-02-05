@@ -44,21 +44,20 @@ public class Path implements Cloneable {
     }
 
     public void addVertice(Vertice e) {
-        Edge edge1 = (Edge) graph.getEdges().stream().filter(r -> r.getP2().equals(e) && vertices.contains(r.getP1())).findAny().orElse(null);
-        if (edge1 != null) {
-            edges.add(edge1);
+        if ((Edge) graph.getEdges().stream().filter(r -> r.getP2().equals(e)
+                && vertices.contains(r.getP1())).findAny().orElse(null) != null) {
+            edges.add((Edge) graph.getEdges().stream().filter(r -> r.getP2().equals(e)
+                    && vertices.contains(r.getP1())).findAny().orElse(null));
         }
         vertices.add(e);
     }
 
     public void removeVertice(Vertice e) {
-        Edge edge1 = (Edge) graph.getEdges().stream().filter(r -> r.getP1().equals(e)).findAny().orElse(null);
-        if (edge1 != null) {
-            edges.remove(edge1);
+        if ((Edge) graph.getEdges().stream().filter(r -> r.getP1().equals(e)).findAny().orElse(null) != null) {
+            edges.remove((Edge) graph.getEdges().stream().filter(r -> r.getP1().equals(e)).findAny().orElse(null));
         }
-        Edge edge2 = (Edge) graph.getEdges().stream().filter(r -> r.getP2().equals(e)).findAny().orElse(null);
-        if (edge2 != null) {
-            edges.remove(edge2);
+        if ((Edge) graph.getEdges().stream().filter(r -> r.getP2().equals(e)).findAny().orElse(null) != null) {
+            edges.remove((Edge) graph.getEdges().stream().filter(r -> r.getP2().equals(e)).findAny().orElse(null));
         }
         vertices.remove(e);
     }
@@ -66,7 +65,7 @@ public class Path implements Cloneable {
     public void displayPath() {
         System.out.println("Nb vertices : " + getNbVertices()
                 + " | Nb stops : " + getEdgesWithStops().size()
-                + " (weight in distance : " + getEdgesWithStops().size() * 10 + ")"
+                + " (weight : " + getEdgesWithStops().size() * 10 + ")"
                 + " | Total euclidean distance : " + getTotalEuclideanDistance());
         vertices.forEach(p -> {
             System.out.print(p.getId() + " ");

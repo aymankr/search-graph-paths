@@ -34,31 +34,21 @@ public class Main {
         }
 
         if (row.contains("#2")) {
-            row = scanner.nextLine();
-            while (!row.contains("#3")) {
-                addVertices(row);
-                row = scanner.nextLine();
-            }
-            graph.initAdjList();
+            row = addVertices(scanner.nextLine(), scanner);
+            graph.initAdjVertices();
         }
         if (row.contains("#3")) {
-            row = scanner.nextLine();
-            while (!row.contains("#4")) {
-                addEdge(row);
-                row = scanner.nextLine();
-            }
+            row = addEdge(scanner.nextLine(), scanner);
         }
         if (row.contains("#4")) {
-            while (scanner.hasNextLine()) {
-                row = scanner.nextLine();
-                setStop(row);
-            }
+            setEdgeStop(scanner.nextLine(), scanner);
         }
 
         findAllPaths(graph.getStart().getId(), graph.getEnd().getId());
         displayBestPath();
     }
 
+    /* ---------------- Getters  ---------------- */
     public static Vertice getVerticeFromId(Integer id) {
         return (Vertice) graph.getVertices().stream().filter(ptmp -> ptmp.getId() == id).findAny().orElse(null);
     }
@@ -71,26 +61,48 @@ public class Main {
         return getVerticeFromId(parseInt(s.split(" ")[1]));
     }
 
-    private static void addVertices(String s) {
-        if (getFirstVertice(s) == null) {
-            graph.addVertice(new Vertice(parseInt(s.split(" ")[0]), Float.parseFloat(s.split(" ")[1]), Float.parseFloat(s.split(" ")[2])));
+    /* ---------------- Construct a graph  ---------------- */
+    private static String addVertices(String s, Scanner scanner) {
+        if (s.contains("#3")) {
+            return s;
         } else {
-            getFirstVertice(s).setLongitude(Float.parseFloat(s.split(" ")[1]));
-            getFirstVertice(s).setLatitude(Float.parseFloat(s.split(" ")[2]));
+            if (getFirstVertice(s) == null) {
+                graph.addVertice(new Vertice(parseInt(s.split(" ")[0]), Float.parseFloat(s.split(" ")[1]), Float.parseFloat(s.split(" ")[2])));
+            } else {
+                getFirstVertice(s).setLongitude(Float.parseFloat(s.split(" ")[1]));
+                getFirstVertice(s).setLatitude(Float.parseFloat(s.split(" ")[2]));
+            }
+            return addVertices(scanner.nextLine(), scanner);
         }
     }
 
-    private static void addEdge(String s) {
-        graph.addEdge(new Edge(getFirstVertice(s), getSecondVertice(s)));
+    private static String addEdge(String s, Scanner scanner) {
+        if (s.contains("#4")) {
+            return s;
+        } else {
+            graph.addEdge(new Edge(getFirstVertice(s), getSecondVertice(s)));
+            return addEdge(scanner.nextLine(), scanner);
+        }
     }
 
-    private static void setStop(String s) {
-        graph.getEdges().stream().filter(r -> r.getP1().equals(getFirstVertice(s))
-                && r.getP2().equals(getSecondVertice(s)))
-                .findAny().orElse(null)
-                .setStopToTrue();
+    private static void setEdgeStop(String s, Scanner scanner) {
+        if (scanner.hasNextLine() || s.isEmpty()) {
+            graph.getEdges().stream().filter(r -> r.getP1().equals(getFirstVertice(s))
+                    && r.getP2().equals(getSecondVertice(s)))
+                    .findAny().orElse(null)
+                    .setStopToTrue();
+            setEdgeStop(scanner.nextLine(), scanner);
+        }
+        // for the last edge in the txt file...
+        if (!s.isEmpty()) {
+            graph.getEdges().stream().filter(r -> r.getP1().equals(getFirstVertice(s))
+                    && r.getP2().equals(getSecondVertice(s)))
+                    .findAny().orElse(null)
+                    .setStopToTrue();
+        }
     }
 
+    /* ---------------- Search paths  ---------------- */
     public static void findAllPaths(int s, int d) throws CloneNotSupportedException {
         boolean[] isVisited = new boolean[graph.getVertices().size()];
         Path path = new Path(graph);
@@ -106,7 +118,7 @@ public class Main {
         }
 
         isVisited[u] = true;
-        for (Integer i : graph.getAdjList()[u]) {
+        for (Integer i : graph.getAdjVertices()[u]) {
             if (!isVisited[i]) {
                 p.addVertice(getVerticeFromId(i));
                 searchPaths(i, d, isVisited, p);
