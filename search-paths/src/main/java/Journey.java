@@ -1,11 +1,15 @@
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import static java.lang.Integer.parseInt;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Scanner;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -16,15 +20,17 @@ public class Journey {
     private Graph graph;
 
     /**
-     * Construct a graph with attributes from a txt file, this function read line by line the txt
-     * 
+     * Construct a graph with attributes from a txt file, this function read
+     * line by line the txt
+     *
      * @param file
      * @throws FileNotFoundException
-     * @throws CloneNotSupportedException 
+     * @throws CloneNotSupportedException
      */
-    public void generateGraph(File file) throws FileNotFoundException, CloneNotSupportedException {
+    public void generateGraph(File file) throws FileNotFoundException, CloneNotSupportedException, IOException {
         Scanner sc = new Scanner(file);
         String row = sc.nextLine();
+        System.out.println(FileUtils.readFileToString(file, StandardCharsets.UTF_8) + "\n");
 
         if (row.contains("#1")) {
             row = sc.nextLine();
@@ -47,7 +53,8 @@ public class Journey {
     /* ---------------- Getters  ---------------- */
     /**
      * Get the graph
-     * @return 
+     *
+     * @return
      */
     public Graph getGraph() {
         return graph;
@@ -55,7 +62,7 @@ public class Journey {
 
     /**
      * Get a vertex from his id
-     * 
+     *
      * @param id id
      * @return id value
      */
@@ -64,9 +71,9 @@ public class Journey {
     }
 
     /**
-     * Get the first vertex of the row
-     * ex : "0 2 4 4 ...etc" will return 0
-     * @param row row 
+     * Get the first vertex of the row ex : "0 2 4 4 ...etc" will return 0
+     *
+     * @param row row
      * @return a vertex
      */
     public Vertex getFirstVertex(String row) {
@@ -75,8 +82,9 @@ public class Journey {
 
     /**
      * Return the second vertex of the row
+     *
      * @param row
-     * @return 
+     * @return
      */
     public Vertex getSecondVertex(String row) {
         return getVertexFromId(parseInt(row.split(" ")[1]));
@@ -84,11 +92,12 @@ public class Journey {
 
     /* ---------------- Construct a graph  ---------------- */
     /**
-     * Add vertices with recursion by reading line by line, if the vertex doesn't exist add it,
-     * else set the longitude and latitude (this case is for the source and the destination vertices)
-     * then return the current row read, to let nexts methods to get this row and to continue to read
-     * the txt file in generateGraphFromFile method
-     * 
+     * Add vertices with recursion by reading line by line, if the vertex
+     * doesn't exist add it, else set the longitude and latitude (this case is
+     * for the source and the destination vertices) then return the current row
+     * read, to let nexts methods to get this row and to continue to read the
+     * txt file in generateGraphFromFile method
+     *
      * @param row row
      * @param sc scanner
      * @return return the last row read
@@ -109,10 +118,10 @@ public class Journey {
 
     /**
      * Add edges with recursion, same principe as addVertices method
-     * 
+     *
      * @param row
      * @param sc
-     * @return 
+     * @return
      */
     private String addEdges(String row, Scanner sc) {
         if (row.contains("#4")) {
@@ -125,9 +134,9 @@ public class Journey {
 
     /**
      * Set stops with recursion
-     * 
+     *
      * @param row
-     * @param scanner 
+     * @param scanner
      */
     private void setStops(String row, Scanner scanner) {
         if (scanner.hasNextLine() || row.isEmpty()) {
@@ -147,11 +156,11 @@ public class Journey {
     /* ---------------- Search paths  ---------------- */
     /**
      * Get all the paths of this graph, given a source and a destination
-     * 
+     *
      * @param s source
      * @param d destination
      * @return list of all paths
-     * @throws CloneNotSupportedException 
+     * @throws CloneNotSupportedException
      */
     public ArrayList<Path> findAllPaths(int s, int d) throws CloneNotSupportedException {
         boolean[] isVisited = new boolean[graph.getVertices().size()];
@@ -163,17 +172,18 @@ public class Journey {
 
     /**
      * Search and add the path to the graph, given a source, destination
-     * isVisited (array of booleans) is there to check if vertices are visited, 
-     * their index matches their id. If they are not visited then we can add them to the path.
-     * Run the function searchAdjacentVertex to find all the vertices linked to the u vertex,
-     * then verify if u correspond to d and add this path to the graph. This method runs recursively
-     * until getting all the paths and adding them in the graph
-     * 
+     * isVisited (array of booleans) is there to check if vertices are visited,
+     * their index matches their id. If they are not visited then we can add
+     * them to the path. Run the function searchAdjacentVertex to find all the
+     * vertices linked to the u vertex, then verify if u correspond to d and add
+     * this path to the graph. This method runs recursively until getting all
+     * the paths and adding them in the graph
+     *
      * @param u source
      * @param d destination
      * @param isVisited array of booleans
      * @param p current path
-     * @throws CloneNotSupportedException 
+     * @throws CloneNotSupportedException
      */
     private void searchPaths(int u, int d, boolean[] isVisited, Path p) throws CloneNotSupportedException {
         if (u == d) {
@@ -188,17 +198,18 @@ public class Journey {
     }
 
     /**
-     * If the vertex linked with the u vertex is not visited, he's added to the current path, and
-     * run it recursively. When the recursion finishes, remove the last vertex added, 
-     * then check if its previous vertex has other adjacent ones by recalling the method to index + 1, 
-     * and run this recursively to rebuild a new path
-     * 
+     * If the vertex linked with the u vertex is not visited, he's added to the
+     * current path, and run it recursively. When the recursion finishes, remove
+     * the last vertex added, then check if its previous vertex has other
+     * adjacent ones by recalling the method to index + 1, and run this
+     * recursively to rebuild a new path
+     *
      * @param u source
      * @param d destination
      * @param isVisited array of booleans
      * @param p current path
      * @param index current index to have the current adjacent vertex
-     * @throws CloneNotSupportedException 
+     * @throws CloneNotSupportedException
      */
     private void searchAdjacentVertex(int u, int d, boolean[] isVisited, Path p, int index) throws CloneNotSupportedException {
         ArrayList<Integer> adj = graph.getAdjVertices()[u];
@@ -213,9 +224,10 @@ public class Journey {
     }
 
     /**
-     * Find the best path, comparing the weight of stops, and the euclidean distance
-     * 
-     * @return return who has the minimum 
+     * Find the best path, comparing the weight of stops, and the euclidean
+     * distance
+     *
+     * @return return who has the minimum
      */
     public Path getBestPath() {
         System.out.println("\nBest path :");

@@ -1,6 +1,7 @@
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * Main class
@@ -16,7 +17,7 @@ public class Main {
      * @throws FileNotFoundException
      * @throws CloneNotSupportedException 
      */
-    public static void main(String[] args) throws FileNotFoundException, CloneNotSupportedException {
+    public static void main(String[] args) throws FileNotFoundException, CloneNotSupportedException, IOException {
         j = new Journey();
         j.generateGraph(new File(System.getProperty("user.dir").replace('\\', '/') + "/files/journey.txt"));
         j.findAllPaths(j.getGraph().getSource().getId(), j.getGraph().getDestination().getId());
