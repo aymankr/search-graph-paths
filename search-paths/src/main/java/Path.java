@@ -65,7 +65,7 @@ public class Path implements Cloneable {
     public void displayPath() {
         System.out.println("Nb vertices : " + getNbVertices()
                 + " | Nb stops : " + getEdgesWithStops().size()
-                + " (weight : " + getEdgesWithStops().size() * 10 + ")"
+                + " (weight : " + getEdgesWithStops().size() * 30 + ")"
                 + " | Total euclidean distance : " + getTotalEuclideanDistance());
         vertices.forEach(p -> {
             System.out.print(p.getId() + " ");

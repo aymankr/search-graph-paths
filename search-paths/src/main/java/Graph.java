@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -18,22 +19,25 @@ public class Graph {
     private final ArrayList<Edge> edges;
     private ArrayList<Integer>[] adjacentVerticesId;
     private final ArrayList<Vertice> vertices;
-    private final ArrayList<Path> paths;
+    private final HashSet<Path> paths;
 
     public Graph(Vertice start, Vertice end) {
         this.start = start;
         this.end = end;
         this.edges = new ArrayList<>();
         this.vertices = new ArrayList<>();
-        this.paths = new ArrayList<>();
+        this.paths = new HashSet<>();
         vertices.add(start);
         vertices.add(end);
     }
 
-    public void initAdjVertices() {
-        adjacentVerticesId = new ArrayList[vertices.size()];
-        for (int i = 0; i < vertices.size(); i++) {
+    public void initAdjVertices(int i) {
+        if (i < vertices.size()) {
+            if (i == 0) {
+                adjacentVerticesId = new ArrayList[vertices.size()];
+            }
             adjacentVerticesId[i] = new ArrayList<>();
+            initAdjVertices(i + 1);
         }
     }
 
@@ -70,7 +74,7 @@ public class Graph {
         paths.add(p);
     }
 
-    public ArrayList<Path> getPaths() {
+    public HashSet<Path> getPaths() {
         return paths;
     }
 }
