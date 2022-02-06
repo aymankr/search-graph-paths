@@ -1,80 +1,120 @@
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
- *
+ * Class Graph : a graph is composed by a source, a destination, list of edges, vertices, paths and
+ * the list of adjacency of vertices
  * @author ay
  */
 public class Graph {
 
-    private final Vertex start;
-    private final Vertex end;
+    private final Vertex source, destination;
 
     private final ArrayList<Edge> edges;
-    private ArrayList<Integer>[] adjacentVerticesId;
     private final ArrayList<Vertex> vertices;
     private final ArrayList<Path> paths;
 
-    public Graph(Vertex start, Vertex end) {
-        this.start = start;
-        this.end = end;
+    private ArrayList<Integer>[] adjacentVertices;
+
+    /**
+     * Construct a graph
+     * @param source
+     * @param destination 
+     */
+    public Graph(Vertex source, Vertex destination) {
+        this.source = source;
+        this.destination = destination;
         this.edges = new ArrayList<>();
         this.vertices = new ArrayList<>();
         this.paths = new ArrayList<>();
-        vertices.add(start);
-        vertices.add(end);
+        vertices.add(source);
+        vertices.add(destination);
     }
 
+    /**
+     * Initialize the list of the adjacency of vertices, with recursion
+     * @param i 
+     */
     public void initAdjVertices(int i) {
         if (i < vertices.size()) {
             if (i == 0) {
-                adjacentVerticesId = new ArrayList[vertices.size()];
+                adjacentVertices = new ArrayList[vertices.size()];
             }
-            adjacentVerticesId[i] = new ArrayList<>();
+            adjacentVertices[i] = new ArrayList<>();
             initAdjVertices(i + 1);
         }
     }
 
-    public Vertex getStart() {
-        return start;
+    /**
+     * Get source vertex
+     * @return 
+     */
+    public Vertex getSource() {
+        return source;
     }
 
-    public Vertex getEnd() {
-        return end;
+    /**
+     * Get destination vertex
+     * @return 
+     */
+    public Vertex getDestination() {
+        return destination;
     }
-
+    
+    /**
+     * Get list of edges of this graph
+     * @return 
+     */
     public ArrayList<Edge> getEdges() {
         return edges;
     }
 
+    /**
+     * Vertices
+     * @return 
+     */
     public ArrayList<Vertex> getVertices() {
         return vertices;
     }
 
-    public ArrayList<Integer>[] getAdjVertices() {
-        return adjacentVerticesId;
-    }
-
-    public void addVertex(Vertex p) {
-        vertices.add(p);
-    }
-
-    public void addEdge(Edge r) {
-        edges.add(r);
-        adjacentVerticesId[r.getP1().getId()].add(r.getP2().getId());
-    }
-
-    public void addPath(Path p) {
-        paths.add(p);
-    }
-
+    /**
+     * Paths
+     * @return 
+     */
     public ArrayList<Path> getPaths() {
         return paths;
+    }
+
+    /**
+     * List of adjacent vertices
+     * @return 
+     */
+    public ArrayList<Integer>[] getAdjVertices() {
+        return adjacentVertices;
+    }
+
+    /**
+     * Add a vertex in the list of vertices, of this graph
+     * @param v vertex
+     */
+    public void addVertex(Vertex v) {
+        vertices.add(v);
+    }
+
+    /**
+     * Add an edge
+     * @param e edge
+     */
+    public void addEdge(Edge e) {
+        edges.add(e);
+        adjacentVertices[e.getP1().getId()].add(e.getP2().getId());
+    }
+
+    /**
+     * Add a path
+     * @param p path
+     */
+    public void addPath(Path p) {
+        paths.add(p);
     }
 }

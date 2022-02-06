@@ -1,28 +1,25 @@
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import static java.lang.Integer.parseInt;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Scanner;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
- *
+ * Main class
  * @author ay
  */
 public class Main {
+    private static Journey j;
 
-    private static Journey journey;
-
+    /**
+     * Start the journey and find the paths
+     * 
+     * @param args
+     * @throws FileNotFoundException
+     * @throws CloneNotSupportedException 
+     */
     public static void main(String[] args) throws FileNotFoundException, CloneNotSupportedException {
-        journey = new Journey();
-        journey.generateGraph(new File(System.getProperty("user.dir").replace('\\', '/') + "/files/hardJourney.txt"));
-        journey.findAllPaths(journey.getGraph().getStart().getId(), journey.getGraph().getEnd().getId());
-        journey.getBestPath().displayPath();
+        j = new Journey();
+        j.generateGraph(new File(System.getProperty("user.dir").replace('\\', '/') + "/files/journey.txt"));
+        j.findAllPaths(j.getGraph().getSource().getId(), j.getGraph().getDestination().getId());
+        j.getBestPath().displayPath();
     }
 }

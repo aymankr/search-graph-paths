@@ -5,14 +5,8 @@ import static java.lang.Integer.parseInt;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Scanner;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
  *
  * @author ay
@@ -21,88 +15,143 @@ public class Journey {
 
     private Graph graph;
 
+    /**
+     * Construct a graph with attributes from a txt file, this function read line by line the txt
+     * 
+     * @param file
+     * @throws FileNotFoundException
+     * @throws CloneNotSupportedException 
+     */
     public void generateGraph(File file) throws FileNotFoundException, CloneNotSupportedException {
-        Scanner scanner = new Scanner(file);
-        String row = scanner.nextLine();
+        Scanner sc = new Scanner(file);
+        String row = sc.nextLine();
 
         if (row.contains("#1")) {
-            row = scanner.nextLine();
+            row = sc.nextLine();
             graph = new Graph(new Vertex(parseInt(row.split(" ")[0])), new Vertex(parseInt(row.split(" ")[1])));
-            row = scanner.nextLine();
+            row = sc.nextLine();
         }
 
         if (row.contains("#2")) {
-            row = addVertices(scanner.nextLine(), scanner);
+            row = addVertices(sc.nextLine(), sc);
             graph.initAdjVertices(0);
         }
         if (row.contains("#3")) {
-            row = addEdges(scanner.nextLine(), scanner);
+            row = addEdges(sc.nextLine(), sc);
         }
         if (row.contains("#4")) {
-            setStops(scanner.nextLine(), scanner);
+            setStops(sc.nextLine(), sc);
         }
     }
 
     /* ---------------- Getters  ---------------- */
-    
+    /**
+     * Get the graph
+     * @return 
+     */
     public Graph getGraph() {
         return graph;
     }
 
-    public Vertex getVertexFromId(Integer id) {
-        return (Vertex) graph.getVertices().stream().filter(ptmp -> ptmp.getId() == id).findAny().orElse(null);
+    /**
+     * Get a vertex from his id
+     * 
+     * @param id id
+     * @return id value
+     */
+    public Vertex getVertexFromId(int id) {
+        return (Vertex) graph.getVertices().stream().filter(v -> v.getId() == id).findAny().orElse(null);
     }
 
-    public Vertex getFirstVertex(String s) {
-        return getVertexFromId(parseInt(s.split(" ")[0]));
+    /**
+     * Get the first vertex of the row
+     * ex : "0 2 4 4 ...etc" will return 0
+     * @param row row 
+     * @return a vertex
+     */
+    public Vertex getFirstVertex(String row) {
+        return getVertexFromId(parseInt(row.split(" ")[0]));
     }
 
-    public Vertex getSecondVertex(String s) {
-        return getVertexFromId(parseInt(s.split(" ")[1]));
+    /**
+     * Return the second vertex of the row
+     * @param row
+     * @return 
+     */
+    public Vertex getSecondVertex(String row) {
+        return getVertexFromId(parseInt(row.split(" ")[1]));
     }
 
     /* ---------------- Construct a graph  ---------------- */
-    private String addVertices(String s, Scanner scanner) {
-        if (s.contains("#3")) {
-            return s;
+    /**
+     * Add vertices with recursion by reading line by line, if the vertex doesn't exist add it,
+     * else set the longitude and latitude (this case is for the source and the destination vertices)
+     * then return the current row read, to let nexts methods to get this row and to continue to read
+     * the txt file in generateGraphFromFile method
+     * 
+     * @param row row
+     * @param sc scanner
+     * @return return the last row read
+     */
+    private String addVertices(String row, Scanner sc) {
+        if (row.contains("#3")) {
+            return row;
         } else {
-            if (getFirstVertex(s) == null) {
-                graph.addVertex(new Vertex(parseInt(s.split(" ")[0]), Float.parseFloat(s.split(" ")[1]), Float.parseFloat(s.split(" ")[2])));
+            if (getFirstVertex(row) == null) {
+                graph.addVertex(new Vertex(parseInt(row.split(" ")[0]), Float.parseFloat(row.split(" ")[1]), Float.parseFloat(row.split(" ")[2])));
             } else {
-                getFirstVertex(s).setLongitude(Float.parseFloat(s.split(" ")[1]));
-                getFirstVertex(s).setLatitude(Float.parseFloat(s.split(" ")[2]));
+                getFirstVertex(row).setLongitude(Float.parseFloat(row.split(" ")[1]));
+                getFirstVertex(row).setLatitude(Float.parseFloat(row.split(" ")[2]));
             }
-            return addVertices(scanner.nextLine(), scanner);
+            return addVertices(sc.nextLine(), sc);
         }
     }
 
-    private String addEdges(String s, Scanner scanner) {
-        if (s.contains("#4")) {
-            return s;
+    /**
+     * Add edges with recursion, same principe as addVertices method
+     * 
+     * @param row
+     * @param sc
+     * @return 
+     */
+    private String addEdges(String row, Scanner sc) {
+        if (row.contains("#4")) {
+            return row;
         } else {
-            graph.addEdge(new Edge(getFirstVertex(s), getSecondVertex(s)));
-            return addEdges(scanner.nextLine(), scanner);
+            graph.addEdge(new Edge(getFirstVertex(row), getSecondVertex(row)));
+            return addEdges(sc.nextLine(), sc);
         }
     }
 
-    private void setStops(String s, Scanner scanner) {
-        if (scanner.hasNextLine() || s.isEmpty()) {
-            graph.getEdges().stream().filter(r -> r.getP1().equals(getFirstVertex(s))
-                    && r.getP2().equals(getSecondVertex(s)))
+    /**
+     * Set stops with recursion
+     * 
+     * @param row
+     * @param scanner 
+     */
+    private void setStops(String row, Scanner scanner) {
+        if (scanner.hasNextLine() || row.isEmpty()) {
+            graph.getEdges().stream().filter(e -> e.getP1().equals(getFirstVertex(row))
+                    && e.getP2().equals(getSecondVertex(row)))
                     .findAny().orElse(null)
                     .setStopToTrue();
             setStops(scanner.nextLine(), scanner);
         }
         // for the last edge line in the txt file...
-        if (!s.isEmpty()) {
-            graph.getEdges().stream().filter(r -> r.getP1().equals(getFirstVertex(s))
-                    && r.getP2().equals(getSecondVertex(s)))
-                    .findAny().orElse(null)
-                    .setStopToTrue();
-        }
+        graph.getEdges().stream().filter(e -> e.getP1().equals(getFirstVertex(row))
+                && e.getP2().equals(getSecondVertex(row)))
+                .findAny().orElse(null)
+                .setStopToTrue();
     }
 
     /* ---------------- Search paths  ---------------- */
+    /**
+     * 
+     * @param s
+     * @param d
+     * @return
+     * @throws CloneNotSupportedException 
+     */
     public ArrayList<Path> findAllPaths(int s, int d) throws CloneNotSupportedException {
         boolean[] isVisited = new boolean[graph.getVertices().size()];
         Path path = new Path(graph);
@@ -111,8 +160,8 @@ public class Journey {
         return graph.getPaths();
     }
 
-    private void searchPaths(Integer u, Integer d, boolean[] isVisited, Path p) throws CloneNotSupportedException {
-        if (u.equals(d)) {
+    private void searchPaths(int u, int d, boolean[] isVisited, Path p) throws CloneNotSupportedException {
+        if (u == d) {
             graph.addPath((Path) p.clone());
             ((Path) p.clone()).displayPath();
             return;
@@ -123,7 +172,17 @@ public class Journey {
         isVisited[u] = false;
     }
 
-    private void searchAdjVertices(Integer u, Integer d, boolean[] isVisited, Path p, int index) throws CloneNotSupportedException {
+    private void searchAdjVertices(int u, int d, boolean[] isVisited, Path p, int index) throws CloneNotSupportedException {
+        ArrayList<Integer> adj = graph.getAdjVertices()[u];
+        if (index < adj.size()) {
+            if (!isVisited[adj.get(index)]) {
+                p.addVertex(getVertexFromId(adj.get(index)));
+                searchPaths(adj.get(index), d, isVisited, p);
+                p.removeVertex(getVertexFromId(adj.get(index)));
+            }
+            searchAdjVertices(u, d, isVisited, p, index + 1);
+        }
+        /*
         if (index < graph.getAdjVertices()[u].size()) {
             if (!isVisited[graph.getAdjVertices()[u].get(index)]) {
                 p.addVertex(getVertexFromId(graph.getAdjVertices()[u].get(index)));
@@ -131,7 +190,7 @@ public class Journey {
                 p.removeVertex(getVertexFromId(graph.getAdjVertices()[u].get(index)));
             }
             searchAdjVertices(u, d, isVisited, p, index + 1);
-        }
+        }*/
     }
 
     public Path getBestPath() {
