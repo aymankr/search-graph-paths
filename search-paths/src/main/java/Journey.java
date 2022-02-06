@@ -146,10 +146,11 @@ public class Journey {
 
     /* ---------------- Search paths  ---------------- */
     /**
+     * Get all the paths of this graph, given a source and a destination
      * 
-     * @param s
-     * @param d
-     * @return
+     * @param s source
+     * @param d destination
+     * @return list of all paths
      * @throws CloneNotSupportedException 
      */
     public ArrayList<Path> findAllPaths(int s, int d) throws CloneNotSupportedException {
@@ -160,6 +161,20 @@ public class Journey {
         return graph.getPaths();
     }
 
+    /**
+     * Search and add the path to the graph, given a source, destination
+     * isVisited (array of booleans) is there to check if vertices are visited, 
+     * their index matches their id. If they are not visited then we can add them to the path.
+     * Run the function searchAdjacentVertex to find all the vertices linked to the u vertex,
+     * then verify if u correspond to d and add this path to the graph. This method runs recursively
+     * until getting all the paths and adding them in the graph
+     * 
+     * @param u source
+     * @param d destination
+     * @param isVisited array of booleans
+     * @param p current path
+     * @throws CloneNotSupportedException 
+     */
     private void searchPaths(int u, int d, boolean[] isVisited, Path p) throws CloneNotSupportedException {
         if (u == d) {
             graph.addPath((Path) p.clone());
@@ -168,11 +183,24 @@ public class Journey {
         }
 
         isVisited[u] = true;  // error if an id is superior to the length of vertices
-        searchAdjVertices(u, d, isVisited, p, 0);
+        searchAdjacentVertex(u, d, isVisited, p, 0);
         isVisited[u] = false;
     }
 
-    private void searchAdjVertices(int u, int d, boolean[] isVisited, Path p, int index) throws CloneNotSupportedException {
+    /**
+     * If the vertex linked with the u vertex is not visited, he's added to the current path, and
+     * run it recursively. When the recursion finishes, remove the last vertex added, 
+     * then check if its previous vertex has other adjacent ones by recalling the method to index + 1, 
+     * and run this recursively to rebuild a new path
+     * 
+     * @param u source
+     * @param d destination
+     * @param isVisited array of booleans
+     * @param p current path
+     * @param index current index to have the current adjacent vertex
+     * @throws CloneNotSupportedException 
+     */
+    private void searchAdjacentVertex(int u, int d, boolean[] isVisited, Path p, int index) throws CloneNotSupportedException {
         ArrayList<Integer> adj = graph.getAdjVertices()[u];
         if (index < adj.size()) {
             if (!isVisited[adj.get(index)]) {
@@ -180,19 +208,15 @@ public class Journey {
                 searchPaths(adj.get(index), d, isVisited, p);
                 p.removeVertex(getVertexFromId(adj.get(index)));
             }
-            searchAdjVertices(u, d, isVisited, p, index + 1);
+            searchAdjacentVertex(u, d, isVisited, p, index + 1);
         }
-        /*
-        if (index < graph.getAdjVertices()[u].size()) {
-            if (!isVisited[graph.getAdjVertices()[u].get(index)]) {
-                p.addVertex(getVertexFromId(graph.getAdjVertices()[u].get(index)));
-                searchPaths(graph.getAdjVertices()[u].get(index), d, isVisited, p);
-                p.removeVertex(getVertexFromId(graph.getAdjVertices()[u].get(index)));
-            }
-            searchAdjVertices(u, d, isVisited, p, index + 1);
-        }*/
     }
 
+    /**
+     * Find the best path, comparing the weight of stops, and the euclidean distance
+     * 
+     * @return return who has the minimum 
+     */
     public Path getBestPath() {
         System.out.println("\nBest path :");
         return Collections.min(graph.getPaths(), Comparator
