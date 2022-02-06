@@ -30,7 +30,7 @@ public class Vertex implements Comparable<Vertex> {
 
     /**
      * Compare two vertices
-     * @param o other vertice
+     * @param o other vertex
      * @return 0 if they are same
      */
     @Override
