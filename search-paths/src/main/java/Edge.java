@@ -8,14 +8,14 @@
  *
  * @author ay
  */
-public class Edge {
+public class Edge implements Comparable<Edge> {
 
-    private final Vertice p1;
-    private final Vertice p2;
+    private final Vertex p1;
+    private final Vertex p2;
 
     private boolean stop;
 
-    public Edge(Vertice p1, Vertice p2) {
+    public Edge(Vertex p1, Vertex p2) {
         this.p1 = p1;
         this.p2 = p2;
     }
@@ -28,15 +28,20 @@ public class Edge {
         stop = true;
     }
 
-    public Vertice getP1() {
+    public Vertex getP1() {
         return p1;
     }
 
-    public Vertice getP2() {
+    public Vertex getP2() {
         return p2;
     }
 
     public boolean isStop() {
         return stop;
+    }
+    
+    @Override
+    public int compareTo(Edge e) {
+        return p1.getId() - e.getP1().getId();
     }
 }

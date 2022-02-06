@@ -8,17 +8,17 @@
  *
  * @author ay
  */
-public class Vertice {
+public class Vertex implements Comparable<Vertex>{
     
     private int id;
     
     private float longitude, latitude;
     
-    public Vertice(int id) {
+    public Vertex(int id) {
         this.id = id;
     }
     
-    public Vertice(int id, float longitude, float latitude) {
+    public Vertex(int id, float longitude, float latitude) {
         this.id = id;
         this.longitude = longitude;
         this.latitude = latitude;
@@ -46,5 +46,10 @@ public class Vertice {
     
     public int getId() {
         return id;
+    }
+
+    @Override
+    public int compareTo(Vertex o) {
+        return (id - o.getId());
     }
 }

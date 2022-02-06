@@ -13,20 +13,20 @@ import java.util.HashSet;
  */
 public class Graph {
 
-    private final Vertice start;
-    private final Vertice end;
+    private final Vertex start;
+    private final Vertex end;
 
     private final ArrayList<Edge> edges;
     private ArrayList<Integer>[] adjacentVerticesId;
-    private final ArrayList<Vertice> vertices;
-    private final HashSet<Path> paths;
+    private final ArrayList<Vertex> vertices;
+    private final ArrayList<Path> paths;
 
-    public Graph(Vertice start, Vertice end) {
+    public Graph(Vertex start, Vertex end) {
         this.start = start;
         this.end = end;
         this.edges = new ArrayList<>();
         this.vertices = new ArrayList<>();
-        this.paths = new HashSet<>();
+        this.paths = new ArrayList<>();
         vertices.add(start);
         vertices.add(end);
     }
@@ -41,11 +41,11 @@ public class Graph {
         }
     }
 
-    public Vertice getStart() {
+    public Vertex getStart() {
         return start;
     }
 
-    public Vertice getEnd() {
+    public Vertex getEnd() {
         return end;
     }
 
@@ -53,7 +53,7 @@ public class Graph {
         return edges;
     }
 
-    public ArrayList<Vertice> getVertices() {
+    public ArrayList<Vertex> getVertices() {
         return vertices;
     }
 
@@ -61,7 +61,7 @@ public class Graph {
         return adjacentVerticesId;
     }
 
-    public void addVertice(Vertice p) {
+    public void addVertex(Vertex p) {
         vertices.add(p);
     }
 
@@ -74,7 +74,7 @@ public class Graph {
         paths.add(p);
     }
 
-    public HashSet<Path> getPaths() {
+    public ArrayList<Path> getPaths() {
         return paths;
     }
 }

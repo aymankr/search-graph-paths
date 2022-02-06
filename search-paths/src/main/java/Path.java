@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
  *
  * @author ay
  */
-public class Path implements Cloneable {
+public class Path implements Cloneable, Comparable<Path> {
 
-    private ArrayList<Vertice> vertices;
+    private ArrayList<Vertex> vertices;
     private final Graph graph;
     private ArrayList<Edge> edges;
 
@@ -27,7 +27,7 @@ public class Path implements Cloneable {
     protected Object clone() throws CloneNotSupportedException {
         Path cloned = (Path) super.clone();
         cloned.edges = (ArrayList<Edge>) edges.clone();
-        cloned.vertices = (ArrayList<Vertice>) vertices.clone();
+        cloned.vertices = (ArrayList<Vertex>) vertices.clone();
         return cloned;
     }
 
@@ -43,7 +43,7 @@ public class Path implements Cloneable {
         return edges.stream().mapToInt(e -> e.getLength()).sum();
     }
 
-    public void addVertice(Vertice e) {
+    public void addVertex(Vertex e) {
         if ((Edge) graph.getEdges().stream().filter(r -> r.getP2().equals(e)
                 && vertices.contains(r.getP1())).findAny().orElse(null) != null) {
             edges.add((Edge) graph.getEdges().stream().filter(r -> r.getP2().equals(e)
@@ -52,7 +52,7 @@ public class Path implements Cloneable {
         vertices.add(e);
     }
 
-    public void removeVertice(Vertice e) {
+    public void removeVertex(Vertex e) {
         if ((Edge) graph.getEdges().stream().filter(r -> r.getP1().equals(e)).findAny().orElse(null) != null) {
             edges.remove((Edge) graph.getEdges().stream().filter(r -> r.getP1().equals(e)).findAny().orElse(null));
         }
@@ -71,5 +71,22 @@ public class Path implements Cloneable {
             System.out.print(p.getId() + " ");
         });
         System.out.println();
+    }
+
+    public ArrayList<Vertex> getVertices() {
+        return vertices;
+    }
+
+    @Override
+    public int compareTo(Path o) {
+        return compareToUtil(o, 0);
+    }
+
+    public int compareToUtil(Path o, int index) {
+        if (index >= o.getNbVertices() || index >= getNbVertices()) {
+            return 0;
+        } else {
+            return vertices.get(index).compareTo(o.getVertices().get(index)) + compareToUtil(o, index + 1);
+        }
     }
 }
