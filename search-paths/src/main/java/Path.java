@@ -113,11 +113,11 @@ public class Path implements Cloneable, Comparable<Path> {
      */
     public void removeVertex(Vertex v) {
         vertices.remove(v);
-        if ((Edge) graph.getEdges().stream().filter(e -> e.getP1().equals(v)).findAny().orElse(null) != null) {
-            edges.remove((Edge) graph.getEdges().stream().filter(r -> r.getP1().equals(v)).findAny().orElse(null));
+        if ((Edge) graph.getEdges().stream().filter(e -> e.getP1().getId()== v.getId()).findAny().orElse(null) != null) {
+            edges.remove((Edge) graph.getEdges().stream().filter(r -> r.getP1().getId() == v.getId()).findAny().orElse(null));
         }
-        if ((Edge) graph.getEdges().stream().filter(e -> e.getP2().equals(v)).findAny().orElse(null) != null) {
-            edges.remove((Edge) graph.getEdges().stream().filter(r -> r.getP2().equals(v)).findAny().orElse(null));
+        if ((Edge) graph.getEdges().stream().filter(e -> e.getP2().getId() == v.getId()).findAny().orElse(null) != null) {
+            edges.remove((Edge) graph.getEdges().stream().filter(r -> r.getP2().getId() == v.getId()).findAny().orElse(null));
         }
     }
 

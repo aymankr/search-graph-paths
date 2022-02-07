@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import static java.lang.Integer.parseInt;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -21,7 +20,7 @@ public class Journey {
 
     /**
      * Construct a graph with attributes from a txt file, this function read
-     * line by line the txt
+     * line by line the txt. The user must respects the syntax of the txt file.
      *
      * @param file
      * @throws FileNotFoundException
@@ -139,7 +138,7 @@ public class Journey {
      * @param scanner
      */
     private void setStops(String row, Scanner scanner) {
-        if (scanner.hasNextLine() || row.isEmpty()) {
+        if (scanner.hasNextLine()) {
             graph.getEdges().stream().filter(e -> e.getP1().equals(getFirstVertex(row))
                     && e.getP2().equals(getSecondVertex(row)))
                     .findAny().orElse(null)
@@ -223,6 +222,14 @@ public class Journey {
         }
     }
 
+    /**
+     * NOTE : (this can be tested for "hardJourney.txt" in Main.java)
+     * Adding a path to the list is not totally good because the edges are deleted "late" with recursion. 
+     * The added paths will probably have the edges of the previously found paths. 
+     * This affects the calculation of the Euclidean distance and therefore the search for the best path. 
+     * To be corrected.
+     */
+    
     /**
      * Find the best path, comparing the weight of stops, and the euclidean
      * distance
