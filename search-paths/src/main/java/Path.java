@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 
 /**
  * Class Path : a path in a graph is composed by vertices linked by edges
+ *
  * @author ay
  */
 public class Path implements Cloneable, Comparable<Path> {
@@ -15,6 +16,7 @@ public class Path implements Cloneable, Comparable<Path> {
 
     /**
      * Construct a path
+     *
      * @param graph the graph
      */
     public Path(Graph graph) {
@@ -24,10 +26,14 @@ public class Path implements Cloneable, Comparable<Path> {
     }
 
     /**
-     * Clone a path, this function is important for the SearchPath method in Journey.java
-     * 
+     * Clone a path, this function is important for the search path method in Journey.java
+     * Since we use only one path to search for them all in the graph, 
+     * when it is necessary to add a found path, 
+     * we must clone this path to add it because we must avoid adding the same path each time in the list, 
+     * by changing the "reference" by cloning
+     *
      * @return cloned path
-     * @throws CloneNotSupportedException 
+     * @throws CloneNotSupportedException
      */
     @Override
     protected Object clone() throws CloneNotSupportedException {
@@ -39,6 +45,7 @@ public class Path implements Cloneable, Comparable<Path> {
 
     /**
      * Compare two paths
+     *
      * @param o other path
      * @return 0 if they are same
      */
@@ -49,6 +56,7 @@ public class Path implements Cloneable, Comparable<Path> {
 
     /**
      * Compare each vertex of the two paths
+     *
      * @param o other path
      * @param index index to start recursion
      * @return sum of compareTo's values from this recursion
@@ -63,6 +71,7 @@ public class Path implements Cloneable, Comparable<Path> {
 
     /**
      * Get vertices
+     *
      * @return list of vertices
      */
     public ArrayList<Vertex> getVertices() {
@@ -71,6 +80,7 @@ public class Path implements Cloneable, Comparable<Path> {
 
     /**
      * Get the length of vertices
+     *
      * @return length value
      */
     public int getNbVertices() {
@@ -79,7 +89,8 @@ public class Path implements Cloneable, Comparable<Path> {
 
     /**
      * Get all the edges they have a stop
-     * @return 
+     *
+     * @return
      */
     public ArrayList<Edge> getEdgesWithStops() {
         return (ArrayList<Edge>) edges.stream().filter(p -> p.isStop()).collect(Collectors.toList());
@@ -87,6 +98,7 @@ public class Path implements Cloneable, Comparable<Path> {
 
     /**
      * Get to total euclidean distance of this path
+     *
      * @return distance
      */
     public int getTotalEuclideanDistance() {
@@ -94,8 +106,9 @@ public class Path implements Cloneable, Comparable<Path> {
     }
 
     /**
-     * Add a vertex in this path, if in the graph, we find an edge e having v as destination, add the edge to
-     * this current path
+     * Add a vertex in this path, if in the graph, we find an edge e having v as
+     * destination, add the edge to this current path
+     *
      * @param v vertex
      */
     public void addVertex(Vertex v) {
@@ -108,12 +121,14 @@ public class Path implements Cloneable, Comparable<Path> {
     }
 
     /**
-     * Remove a vertex in the path, also remove the edges if the source or the destination corresponds
-     * @param v 
+     * Remove a vertex in the path, also remove the edges if the source or the
+     * destination corresponds
+     *
+     * @param v
      */
     public void removeVertex(Vertex v) {
         vertices.remove(v);
-        if ((Edge) graph.getEdges().stream().filter(e -> e.getP1().getId()== v.getId()).findAny().orElse(null) != null) {
+        if ((Edge) graph.getEdges().stream().filter(e -> e.getP1().getId() == v.getId()).findAny().orElse(null) != null) {
             edges.remove((Edge) graph.getEdges().stream().filter(r -> r.getP1().getId() == v.getId()).findAny().orElse(null));
         }
         if ((Edge) graph.getEdges().stream().filter(e -> e.getP2().getId() == v.getId()).findAny().orElse(null) != null) {
@@ -125,13 +140,14 @@ public class Path implements Cloneable, Comparable<Path> {
      * Display informations and vertices of the path
      */
     public void displayPath() {
-        System.out.println("Nb vertices : " + getNbVertices()
-                + " | Nb stops : " + getEdgesWithStops().size()
-                + " (weight : " + getEdgesWithStops().size() * 30 + ")"
-                + " | Total euclidean distance : " + getTotalEuclideanDistance());
         vertices.forEach(v -> {
             System.out.print(v.getId() + " ");
         });
+        System.out.print("--> Vertices : " + getNbVertices()
+                + " | Stops : " + getEdgesWithStops().size()
+                + " (weight:" + getEdgesWithStops().size() * 30 + ")"
+                + " | Total euclidean dist. : " + getTotalEuclideanDistance()
+                + " | Evaluation : " + (getTotalEuclideanDistance() + getEdgesWithStops().size() * 30));
         System.out.println();
     }
 }
