@@ -8,7 +8,6 @@ import java.io.IOException;
  * @author ay
  */
 public class Main {
-    private static Journey j;
 
     /**
      * Start the journey and find the paths
@@ -18,8 +17,8 @@ public class Main {
      * @throws CloneNotSupportedException 
      */
     public static void main(String[] args) throws FileNotFoundException, CloneNotSupportedException, IOException {
-        j = new Journey();
-        j.generateGraph(new File(System.getProperty("user.dir").replace('\\', '/') + "/files/journey.txt"));
+        Journey j = new Journey();
+        j.generateGraph(new File(System.getProperty("user.dir").replace('\\', '/') + "/files/hardJourney.txt"));
         j.findAllPaths(j.getGraph().getSource().getId(), j.getGraph().getDestination().getId());
         j.getBestPath().displayPath();
     }

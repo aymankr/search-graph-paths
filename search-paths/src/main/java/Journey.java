@@ -20,7 +20,8 @@ public class Journey {
 
     /**
      * Construct a graph with attributes from a txt file, this function read
-     * line by line the txt. The user must respects the syntax of the txt file.
+     * line by line the txt. The user must respects the syntax of the txt file, and must put
+     * at least 1 of each kind of attributes : start, end, vertices, edges, stops
      *
      * @param file
      * @throws FileNotFoundException
@@ -192,7 +193,7 @@ public class Journey {
         }
 
         isVisited[u] = true;  // error if an id is superior to the length of vertices
-        searchAdjacentVertex(u, d, isVisited, p, 0);
+        searchAdjacentVertex(u, d, isVisited, (Path) p.clone(), 0);
         isVisited[u] = false;
     }
 
@@ -221,14 +222,6 @@ public class Journey {
             searchAdjacentVertex(u, d, isVisited, p, index + 1);
         }
     }
-
-    /**
-     * NOTE : (this can be tested for "hardJourney.txt" in Main.java)
-     * Adding a path to the list is not totally good because the edges are deleted "late" with recursion. 
-     * The added paths will probably have the edges of the previously found paths. 
-     * This affects the calculation of the Euclidean distance and therefore the search for the best path. 
-     * To be corrected.
-     */
     
     /**
      * Find the best path, comparing the weight of stops, and the euclidean
