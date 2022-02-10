@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 /**
@@ -26,11 +27,11 @@ public class Path implements Cloneable, Comparable<Path> {
     }
 
     /**
-     * Clone a path, this function is important for the search path method in Journey.java
-     * Since we use only one path to search for them all in the graph, 
-     * when it is necessary to add a found path, 
-     * we must clone this path to add it because we must avoid adding the same path each time in the list, 
-     * by changing the "reference" by cloning
+     * Clone a path, this function is important for the search path method in
+     * Journey.java Since we use only one path to search for them all in the
+     * graph, when it is necessary to add a found path, we must clone this path
+     * to add it because we must avoid adding the same path each time in the
+     * list, by changing the "reference" by cloning
      *
      * @return cloned path
      * @throws CloneNotSupportedException
@@ -88,21 +89,16 @@ public class Path implements Cloneable, Comparable<Path> {
     }
 
     /**
-     * Get all the edges they have a stop
-     *
-     * @return
-     */
-    public ArrayList<Edge> getEdgesWithStops() {
-        return (ArrayList<Edge>) edges.stream().filter(p -> p.isStop()).collect(Collectors.toList());
-    }
-
-    /**
      * Get to total euclidean distance of this path
      *
      * @return distance
      */
     public int getTotalEuclideanDistance() {
         return edges.stream().mapToInt(e -> e.getLength()).sum();
+    }
+
+    private boolean sourceEdgeExists(Edge e) {
+        return edges.stream().anyMatch(e2 -> (e2.getP1() == e.getP1()));
     }
 
     /**
@@ -113,10 +109,10 @@ public class Path implements Cloneable, Comparable<Path> {
      */
     public void addVertex(Vertex v) {
         vertices.add(v);
-        if ((Edge) graph.getEdges().stream().filter(e -> e.getP2().equals(v)
-                && vertices.contains(e.getP1())).findAny().orElse(null) != null) {
-            edges.add((Edge) graph.getEdges().stream().filter(e -> e.getP2().equals(v)
-                    && vertices.contains(e.getP1())).findAny().orElse(null));
+        Edge e1 = (Edge) graph.getEdges().stream().filter(e -> e.getP2().equals(v)
+                && !sourceEdgeExists(e) && vertices.contains(e.getP1())).findAny().orElse(null);
+        if (e1 != null) {
+            edges.add(e1);
         }
     }
 
@@ -128,26 +124,33 @@ public class Path implements Cloneable, Comparable<Path> {
      */
     public void removeVertex(Vertex v) {
         vertices.remove(v);
-        if ((Edge) graph.getEdges().stream().filter(e -> e.getP1().getId() == v.getId()).findAny().orElse(null) != null) {
-            edges.remove((Edge) graph.getEdges().stream().filter(r -> r.getP1().getId() == v.getId()).findAny().orElse(null));
+        Edge e1 = (Edge) graph.getEdges().stream().filter(e -> e.getP1().getId() == v.getId()).findAny().orElse(null);
+        Edge e2 = (Edge) graph.getEdges().stream().filter(e -> e.getP2().getId() == v.getId()).findAny().orElse(null);
+
+        if (e1 != null) {
+            edges.remove(e1);
         }
-        if ((Edge) graph.getEdges().stream().filter(e -> e.getP2().getId() == v.getId()).findAny().orElse(null) != null) {
-            edges.remove((Edge) graph.getEdges().stream().filter(r -> r.getP2().getId() == v.getId()).findAny().orElse(null));
+        if (e2 != null) {
+            edges.remove(e2);
         }
     }
 
     /**
-     * Display informations and vertices of the path
+     * Display informations of the path
      */
     public void displayPath() {
         vertices.forEach(v -> {
             System.out.print(v.getId() + " ");
         });
         System.out.print("--> Vertices : " + getNbVertices()
-                + " | Stops : " + getEdgesWithStops().size()
-                + " (weight:" + getEdgesWithStops().size() * 30 + ")"
-                + " | Total euclidean dist. : " + getTotalEuclideanDistance()
-                + " | Evaluation : " + (getTotalEuclideanDistance() + getEdgesWithStops().size() * 30));
+                + " | Total euclidean dist. : " + getTotalEuclideanDistance());
         System.out.println();
+    }
+
+    public boolean hasAllStops() {
+        if (graph.getEdgesWithStops().isEmpty()) { // if there is no stops, add all paths
+            return true;
+        }
+        return Collections.indexOfSubList(edges, graph.getEdgesWithStops()) != -1;
     }
 }

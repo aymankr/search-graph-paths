@@ -1,9 +1,11 @@
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
- * Class Graph : a graph is composed by a source, a destination, list of edges, vertices, paths and
- * the list of adjacency of vertices
+ * Class Graph : a graph is composed by a source, a destination, list of edges,
+ * vertices, paths and the list of adjacency of vertices
+ *
  * @author ay
  */
 public class Graph {
@@ -18,8 +20,9 @@ public class Graph {
 
     /**
      * Construct a graph
+     *
      * @param source
-     * @param destination 
+     * @param destination
      */
     public Graph(Vertex source, Vertex destination) {
         this.source = source;
@@ -33,7 +36,8 @@ public class Graph {
 
     /**
      * Initialize the list of the adjacency of vertices, with recursion
-     * @param i 
+     *
+     * @param i
      */
     public void initAdjVertices(int i) {
         if (i < vertices.size()) {
@@ -47,7 +51,8 @@ public class Graph {
 
     /**
      * Get source vertex
-     * @return 
+     *
+     * @return
      */
     public Vertex getSource() {
         return source;
@@ -55,15 +60,17 @@ public class Graph {
 
     /**
      * Get destination vertex
-     * @return 
+     *
+     * @return
      */
     public Vertex getDestination() {
         return destination;
     }
-    
+
     /**
      * Get list of edges of this graph
-     * @return 
+     *
+     * @return
      */
     public ArrayList<Edge> getEdges() {
         return edges;
@@ -71,7 +78,8 @@ public class Graph {
 
     /**
      * Vertices
-     * @return 
+     *
+     * @return
      */
     public ArrayList<Vertex> getVertices() {
         return vertices;
@@ -79,7 +87,8 @@ public class Graph {
 
     /**
      * Paths
-     * @return 
+     *
+     * @return
      */
     public ArrayList<Path> getPaths() {
         return paths;
@@ -87,7 +96,8 @@ public class Graph {
 
     /**
      * List of adjacent vertices
-     * @return 
+     *
+     * @return
      */
     public ArrayList<Integer>[] getAdjVertices() {
         return adjacentVertices;
@@ -95,6 +105,7 @@ public class Graph {
 
     /**
      * Add a vertex in the list of vertices, of this graph
+     *
      * @param v vertex
      */
     public void addVertex(Vertex v) {
@@ -103,18 +114,31 @@ public class Graph {
 
     /**
      * Add an edge
+     *
      * @param e edge
      */
     public void addEdge(Edge e) {
         edges.add(e);
+        //two directions
         adjacentVertices[e.getP1().getId()].add(e.getP2().getId());
+        adjacentVertices[e.getP2().getId()].add(e.getP1().getId());
     }
 
     /**
      * Add a path
+     *
      * @param p path
      */
     public void addPath(Path p) {
         paths.add(p);
+    }
+
+    /**
+     * Get all the edges they have a stop
+     *
+     * @return
+     */
+    public ArrayList<Edge> getEdgesWithStops() {
+        return (ArrayList<Edge>) edges.stream().filter(p -> p.isStop()).collect(Collectors.toList());
     }
 }

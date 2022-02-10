@@ -20,8 +20,9 @@ public class Journey {
 
     /**
      * Construct a graph with attributes from a txt file, this function read
-     * line by line the txt. The user must respects the syntax of the txt file, and must put
-     * at least 1 of each kind of attributes : start, end, vertices, edges, stops
+     * line by line the txt. The user must respects the syntax of the txt file,
+     * and must put at least 1 of each kind of attributes : start, end,
+     * vertices, edges, stops
      *
      * @param file
      * @throws FileNotFoundException
@@ -45,7 +46,7 @@ public class Journey {
         if (row.contains("#3")) {
             row = addEdges(sc.nextLine(), sc);
         }
-        if (row.contains("#4")) {
+        if (row.contains("#4") && !row.contains("no stops")) {
             setStops(sc.nextLine(), sc);
         }
     }
@@ -186,7 +187,7 @@ public class Journey {
      * @throws CloneNotSupportedException
      */
     private void searchPaths(int u, int d, boolean[] isVisited, Path p) throws CloneNotSupportedException {
-        if (u == d) {
+        if (u == d && ((Path) p.clone()).hasAllStops()) {
             graph.addPath((Path) p.clone());
             ((Path) p.clone()).displayPath();
             return;
@@ -222,16 +223,15 @@ public class Journey {
             searchAdjacentVertex(u, d, isVisited, p, index + 1);
         }
     }
-    
+
     /**
-     * Find the best path, comparing the weight of stops, and the euclidean
-     * distance
+     * Find the best path comparing the euclidean distance
      *
      * @return return who has the minimum
      */
     public Path getBestPath() {
         System.out.println("\nBest path :");
         return Collections.min(graph.getPaths(), Comparator
-                .comparing(p -> p.getEdgesWithStops().size() * 30 + p.getTotalEuclideanDistance()));
+                .comparing(p -> p.getTotalEuclideanDistance()));
     }
 }
