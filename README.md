@@ -1,6 +1,6 @@
 # Evaluation of the best path
 
-The purpose of this program is to build a graph from a text file. This graph is composed of paths, which are themselves composed of vertices linked with a distance (longitude and latitude), the edges can be "stops" and obligatory points to pass during the path. The goal is to find the best possible path of this chart that goes through all the "stops".
+The purpose of this program is to build a graph from a text file. This graph is composed of paths, which are themselves composed of vertices linked with a distance (longitude and latitude), the edges can be "stops" and obligatory points to pass during the path. The goal is to find the best possible path of this journey that goes through all the "stops".
 
 ## Example
 
