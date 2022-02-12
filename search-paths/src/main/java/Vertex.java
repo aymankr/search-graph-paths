@@ -1,6 +1,7 @@
 
 /**
  * Class Vertex : a point in the graph
+ *
  * @author ay
  */
 public class Vertex implements Comparable<Vertex> {
@@ -10,6 +11,7 @@ public class Vertex implements Comparable<Vertex> {
 
     /**
      * Construct a vertex with only id
+     *
      * @param id id number
      */
     public Vertex(int id) {
@@ -18,9 +20,10 @@ public class Vertex implements Comparable<Vertex> {
 
     /**
      * Construct a vertex with id, longitude, latitude
+     *
      * @param id
      * @param longitude
-     * @param latitude 
+     * @param latitude
      */
     public Vertex(int id, float longitude, float latitude) {
         this.id = id;
@@ -30,6 +33,7 @@ public class Vertex implements Comparable<Vertex> {
 
     /**
      * Compare two vertices
+     *
      * @param o other vertex
      * @return 0 if they are same
      */
@@ -40,7 +44,8 @@ public class Vertex implements Comparable<Vertex> {
 
     /**
      * Get the longitude
-     * @return 
+     *
+     * @return
      */
     public float getLongitude() {
         return longitude;
@@ -48,7 +53,8 @@ public class Vertex implements Comparable<Vertex> {
 
     /**
      * Get the latitude
-     * @return 
+     *
+     * @return
      */
     public float getLatitude() {
         return latitude;
@@ -56,7 +62,8 @@ public class Vertex implements Comparable<Vertex> {
 
     /**
      * Get id
-     * @return 
+     *
+     * @return
      */
     public int getId() {
         return id;
@@ -64,7 +71,8 @@ public class Vertex implements Comparable<Vertex> {
 
     /**
      * Set id value of this vertex
-     * @param id 
+     *
+     * @param id
      */
     public void setId(int id) {
         this.id = id;
@@ -72,7 +80,8 @@ public class Vertex implements Comparable<Vertex> {
 
     /**
      * Set longitude
-     * @param longitude 
+     *
+     * @param longitude
      */
     public void setLongitude(float longitude) {
         this.longitude = longitude;
@@ -80,7 +89,8 @@ public class Vertex implements Comparable<Vertex> {
 
     /**
      * Set latitude
-     * @param latitude 
+     *
+     * @param latitude
      */
     public void setLatitude(float latitude) {
         this.latitude = latitude;

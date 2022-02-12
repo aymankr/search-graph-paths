@@ -97,6 +97,12 @@ public class Path implements Cloneable, Comparable<Path> {
         return edges.stream().mapToInt(e -> e.getLength()).sum();
     }
 
+    /**
+     * Verify if in this path, an another edge has the same source vertex as the e Edge
+     * 
+     * @param e
+     * @return 
+     */
     private boolean sourceEdgeExists(Edge e) {
         return edges.stream().anyMatch(e2 -> (e2.getP1() == e.getP1()));
     }
@@ -136,7 +142,7 @@ public class Path implements Cloneable, Comparable<Path> {
     }
 
     /**
-     * Display informations of the path
+     * Show informations of this path
      */
     public void displayPath() {
         vertices.forEach(v -> {
@@ -147,8 +153,13 @@ public class Path implements Cloneable, Comparable<Path> {
         System.out.println();
     }
 
+    /**
+     * Verify if this path passes throught all stops
+     * 
+     * @return boolean
+     */
     public boolean hasAllStops() {
-        if (graph.getEdgesWithStops().isEmpty()) { // if there is no stops, add all paths
+        if (graph.getEdgesWithStops().isEmpty()) { // if there is no stops
             return true;
         }
         return Collections.indexOfSubList(edges, graph.getEdgesWithStops()) != -1;

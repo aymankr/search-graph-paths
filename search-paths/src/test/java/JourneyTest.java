@@ -73,10 +73,9 @@ public class JourneyTest {
                 new Edge(vertices.get(2), vertices.get(5)));
 
         // comparing the edges
-       JourneyTestUtils.testEdges(edges, journey.getGraph().getEdges(), 0);
+        JourneyTestUtils.testEdges(edges, journey.getGraph().getEdges(), 0);
 
-        /* comparing the vertices, error because the order of the list changed in this function...why?? */
-        //testVertices(vertices, journey.getGraph().getVertices(), 0);
+        JourneyTestUtils.testVertices(vertices, 0, journey);
         // possible paths
         // path A
         paths.add(new Path(journey.getGraph()));
@@ -150,7 +149,7 @@ public class JourneyTest {
         // comparing the edges
         JourneyTestUtils.testEdges(edges, journey.getGraph().getEdges(), 0);
 
-        //testVertices(vertices, journey.getGraph().getVertices(), 0);
+        JourneyTestUtils.testVertices(vertices, 0, journey);
         // possible path
         paths.add(new Path(journey.getGraph()));
         paths.get(0).addVertex(vertices.get(0));
